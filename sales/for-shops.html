@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>イベントPOS - 出店者様向けご案内</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans JP', sans-serif; color: #1a1a2e; line-height: 1.8; }
+
+    /* ===== Hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #7c2d12, #dc2626, #b91c1c);
+      color: #fff;
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 30%, rgba(251,191,36,0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -10px); }
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      padding: 6px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .hero h1 .accent { color: #fbbf24; }
+    .hero p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* ===== Section ===== */
+    .section {
+      padding: 80px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-warm { background: #fffbeb; }
+    .section-dark { background: #fafaf9; }
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #dc2626;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section h2 {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .section .lead {
+      font-size: 16px;
+      color: #64748b;
+      max-width: 700px;
+      margin-bottom: 48px;
+    }
+
+    /* ===== Scene Cards ===== */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .scene-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #e7e5e4;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .scene-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .scene-card .card-header {
+      padding: 20px 24px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .scene-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .scene-card h3 { font-size: 17px; font-weight: 700; }
+    .scene-card .card-body {
+      padding: 0 24px 24px;
+    }
+    .scene-card p {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+    .scene-tag {
+      display: inline-block;
+      background: #fef2f2;
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* ===== Phone Mockup ===== */
+    .phone-section {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .phone-section.reverse { flex-direction: row-reverse; }
+    .phone-text { flex: 1; min-width: 280px; }
+    .phone-text h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .phone-text p {
+      color: #64748b;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .phone-text .check-list {
+      list-style: none;
+      padding: 0;
+    }
+    .phone-text .check-list li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: #475569;
+    }
+    .phone-text .check-list li::before {
+      content: '✓';
+      color: #dc2626;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .phone-frame {
+      flex: 0 0 auto;
+      width: 280px;
+      background: #1a1a2e;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .phone-screen {
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 480px;
+    }
+    .phone-statusbar {
+      background: #f8f8f8;
+      padding: 6px 16px;
+      font-size: 10px;
+      color: #999;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ===== POS Mockup ===== */
+    .pos-header {
+      background: #dc2626;
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pos-categories {
+      display: flex;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      overflow-x: auto;
+    }
+    .pos-cat {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pos-cat.active { background: #dc2626; color: #fff; }
+    .pos-cat.inactive { background: #f5f5f4; color: #78716c; }
+    .pos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 12px;
+    }
+    .pos-item {
+      background: #fff;
+      border: 1.5px solid #e7e5e4;
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .pos-item .emoji { font-size: 28px; margin-bottom: 4px; }
+    .pos-item .name { font-size: 12px; font-weight: 600; }
+    .pos-item .price { font-size: 13px; font-weight: 800; color: #dc2626; }
+    .pos-cart-bar {
+      background: #dc2626;
+      color: #fff;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ===== Kitchen Mockup ===== */
+    .kitchen-header {
+      background: #f97316;
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .kitchen-cards {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .kitchen-card {
+      border: 2px solid #fed7aa;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff7ed;
+    }
+    .kitchen-card .order-num {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ea580c;
+    }
+    .kitchen-card .order-items {
+      font-size: 12px;
+      color: #78716c;
+      margin-top: 4px;
+    }
+    .kitchen-card .order-item-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+    }
+    .kitchen-card .order-btn {
+      margin-top: 8px;
+      width: 100%;
+      background: #f97316;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ===== Number Display Mockup ===== */
+    .number-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 360px;
+      background: linear-gradient(180deg, #f0fdf4, #fff);
+      padding: 40px 20px;
+    }
+    .number-display .check-icon {
+      width: 60px;
+      height: 60px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .number-display .label { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+    .number-display .big-num {
+      font-size: 72px;
+      font-weight: 900;
+      color: #166534;
+      line-height: 1;
+    }
+    .number-display .sub { font-size: 12px; color: #94a3b8; margin-top: 12px; }
+
+    /* ===== Benefit Cards ===== */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .benefit-card {
+      display: flex;
+      gap: 16px;
+      padding: 24px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e7e5e4;
+    }
+    .benefit-num {
+      flex: 0 0 auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .benefit-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .benefit-card p { font-size: 13px; color: #64748b; }
+
+    /* ===== Flow ===== */
+    .flow-timeline {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .flow-timeline::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e7e5e4;
+    }
+    .flow-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      position: relative;
+    }
+    .flow-dot {
+      flex: 0 0 auto;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #dc2626;
+      font-size: 18px;
+      z-index: 1;
+    }
+    .flow-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .flow-item p { font-size: 14px; color: #64748b; }
+
+    /* ===== FAQ ===== */
+    .faq-list { max-width: 700px; }
+    .faq-item {
+      border-bottom: 1px solid #e7e5e4;
+      padding: 20px 0;
+    }
+    .faq-q {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .faq-q::before {
+      content: 'Q';
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      background: #dc2626;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .faq-a {
+      font-size: 14px;
+      color: #64748b;
+      padding-left: 32px;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: #fff;
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .cta-section h2 {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 32px;
+      font-size: 16px;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: #dc2626;
+      padding: 16px 48px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .cta-sub {
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    footer {
+      background: #1c1917;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 60px 20px 80px; }
+      .section { padding: 48px 20px; }
+      .phone-frame { width: 240px; margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">for Shop Owners</div>
+    <h1>スマホ1台で<br><span class="accent">本格POSレジ</span></h1>
+    <p>注文受付から厨房連携、お客様への受渡しまで。イベント出店に必要なオペレーションをこの1つのアプリで完結。</p>
+    <div class="hero-features">
+      <div class="hero-feature">🆓 無料で使える</div>
+      <div class="hero-feature">📱 アプリ不要</div>
+      <div class="hero-feature">⚡ 研修ゼロで使える</div>
+    </div>
+  </section>
+
+  <!-- こんな場面で -->
+  <section class="section">
+    <div class="section-label">Use Cases</div>
+    <h2>こんな出店シーンで力を発揮</h2>
+    <p class="lead">クリスマスマーケット、フードフェス、学園祭、夏祭り…どんなイベントでも同じ操作で使えます。</p>
+    <div class="scene-grid">
+      <div class="scene-card">
+        <div class="card-header">
+          <div class="scene-icon" style="background:#fef2f2;">🍷</div>
+          <h3>飲食出店</h3>
+        </div>
+        <div class="card-body">
+          <p>グリューワイン、ソーセージ、クレープ…。注文が集中しても、レジ→厨房→受渡しの流れが自動で回る。</p>
+          <span class="scene-tag">厨房連携</span>
+        </div>
+      </div>
+      <div class="scene-card">
+        <div class="card-header">
+          <div class="scene-icon" style="background:#f0fdf4;">🎁</div>
+          <h3>物販出店</h3>
+        </div>
+        <div class="card-body">
+          <p>ハンドメイド雑貨、アクセサリー。会計と在庫管理をスマホで。手書きの売上メモはもう不要。</p>
+          <span class="scene-tag">在庫管理</span>
+        </div>
+      </div>
+      <div class="scene-card">
+        <div class="card-header">
+          <div class="scene-icon" style="background:#eff6ff;">🎪</div>
+          <h3>キッチンカー</h3>
+        </div>
+        <div class="card-body">
+          <p>狭い車内でもスマホだけで完結。お客様への番号札表示もアプリ内で。機材は一切不要。</p>
+          <span class="scene-tag">省スペース</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screen 1: POS -->
+  <section class="section-dark">
+    <div class="section">
+      <div class="section-label">Screen 01</div>
+      <h2>レジ画面</h2>
+      <div class="phone-section">
+        <div class="phone-text">
+          <h3>タップするだけの直感操作</h3>
+          <p>商品をタップしてカートに入れ、会計ボタンを押すだけ。初めてのアルバイトスタッフでも、説明なしで使い始められます。</p>
+          <ul class="check-list">
+            <li>カテゴリ分けで商品をすぐ見つけられる</li>
+            <li>トッピング・サイズなどオプション対応</li>
+            <li>現金 / キャッシュレス両対応</li>
+            <li>おつり自動計算＆番号札を画面表示</li>
+            <li>イートイン / テイクアウト切替</li>
+          </ul>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-statusbar">イベントPOS</div>
+            <div class="pos-header">🏪 注文受付</div>
+            <div class="pos-categories">
+              <span class="pos-cat active">すべて</span>
+              <span class="pos-cat inactive">ドリンク</span>
+              <span class="pos-cat inactive">フード</span>
+              <span class="pos-cat inactive">デザート</span>
+            </div>
+            <div class="pos-grid">
+              <div class="pos-item">
+                <div class="emoji">🍷</div>
+                <div class="name">グリューワイン</div>
+                <div class="price">¥600</div>
+              </div>
+              <div class="pos-item">
+                <div class="emoji">🌭</div>
+                <div class="name">ソーセージ</div>
+                <div class="price">¥500</div>
+              </div>
+              <div class="pos-item">
+                <div class="emoji">🥨</div>
+                <div class="name">プレッツェル</div>
+                <div class="price">¥400</div>
+              </div>
+              <div class="pos-item">
+                <div class="emoji">☕</div>
+                <div class="name">ホットココア</div>
+                <div class="price">¥450</div>
+              </div>
+            </div>
+            <div class="pos-cart-bar">
+              <span>カート (2点)</span>
+              <span>¥1,100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screen 2: Kitchen -->
+  <section class="section">
+    <div class="section-label">Screen 02</div>
+    <h2>厨房画面</h2>
+    <div class="phone-section reverse">
+      <div class="phone-text">
+        <h3>注文が入ったら即表示</h3>
+        <p>レジで会計が完了した瞬間に、厨房のタブレット・スマホに注文内容が表示されます。口頭伝達のミスや聞き間違いがゼロに。</p>
+        <ul class="check-list">
+          <li>注文が入ると自動で画面に追加</li>
+          <li>「調理開始」「完了」をタップで状態管理</li>
+          <li>注文番号で受渡しミスを防止</li>
+          <li>アレルギーメモ・特記事項も表示</li>
+        </ul>
+      </div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-statusbar">イベントPOS</div>
+          <div class="kitchen-header">👨‍🍳 厨房モニター</div>
+          <div class="kitchen-cards">
+            <div class="kitchen-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="order-num">#023</span>
+                <span style="font-size:11px; background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:100px; font-weight:600;">調理中</span>
+              </div>
+              <div class="order-items">
+                <div class="order-item-line"><span>グリューワイン</span><span>×2</span></div>
+                <div class="order-item-line"><span>ソーセージ</span><span>×1</span></div>
+              </div>
+              <button class="order-btn">✓ 調理完了</button>
+            </div>
+            <div class="kitchen-card" style="border-color:#fecaca; background:#fef2f2;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="order-num">#024</span>
+                <span style="font-size:11px; background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:100px; font-weight:600;">新規</span>
+              </div>
+              <div class="order-items">
+                <div class="order-item-line"><span>ホットココア</span><span>×1</span></div>
+                <div class="order-item-line"><span>プレッツェル</span><span>×2</span></div>
+                <div style="font-size:11px; color:#dc2626; margin-top:4px;">※ ナッツアレルギーあり</div>
+              </div>
+              <button class="order-btn" style="background:#dc2626;">🔥 調理開始</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screen 3: Number Display -->
+  <section class="section-dark">
+    <div class="section">
+      <div class="section-label">Screen 03</div>
+      <h2>受渡し・番号札表示</h2>
+      <div class="phone-section">
+        <div class="phone-text">
+          <h3>「何番のお客様〜」をスマートに</h3>
+          <p>会計完了時に番号札が画面に大きく表示。お客様にそのまま見せるだけ。紙の番号札の印刷コストもゼロです。</p>
+          <ul class="check-list">
+            <li>会計完了→おつり表示→番号札の自然な流れ</li>
+            <li>受渡し専用画面で完了処理もワンタップ</li>
+            <li>提供済み履歴で「受け取ってない」トラブルにも対応</li>
+            <li>番号は日ごとに自動リセット</li>
+          </ul>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-statusbar">イベントPOS</div>
+            <div class="number-display">
+              <div class="check-icon">✓</div>
+              <div class="label">この番号札をお客様にお渡しください</div>
+              <div class="big-num">23</div>
+              <div class="sub">注文完了 14:32</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="section">
+    <div class="section-label">Benefits</div>
+    <h2>選ばれる6つの理由</h2>
+    <p class="lead">イベント現場の「困った」を知り尽くして作った、出店者のためのPOSです。</p>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <div class="benefit-num">1</div>
+        <div>
+          <h4>初期費用ゼロ</h4>
+          <p>専用機器の購入やリース不要。今お使いのスマホ・タブレットがそのままPOSレジになります。</p>
+        </div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-num">2</div>
+        <div>
+          <h4>研修不要の直感UI</h4>
+          <p>商品をタップ→会計→完了。この3ステップだけ。当日初めて触るアルバイトでも即戦力。</p>
+        </div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-num">3</div>
+        <div>
+          <h4>厨房とリアルタイム連携</h4>
+          <p>レジで受けた注文が厨房画面に即反映。口頭伝達のミスゼロ、オーダー漏れゼロの現場を実現。</p>
+        </div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-num">4</div>
+        <div>
+          <h4>売上は自動集計</h4>
+          <p>閉店後にレシートを数える必要なし。リアルタイムで売上・注文数・客単価を確認できます。</p>
+        </div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-num">5</div>
+        <div>
+          <h4>オフラインにも強い</h4>
+          <p>屋外イベントでWi-Fiが不安定でも、基本操作は継続可能。回線復帰時に自動同期。</p>
+        </div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-num">6</div>
+        <div>
+          <h4>現金もキャッシュレスも</h4>
+          <p>現金会計ではおつり自動計算。お手持ちのキャッシュレス端末との併用もスムーズです。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Start -->
+  <section class="section-warm">
+    <div class="section">
+      <div class="section-label">Getting Started</div>
+      <h2>使い始めるまでの流れ</h2>
+      <p class="lead">面倒な手続きは一切ありません。</p>
+      <div class="flow-timeline">
+        <div class="flow-item">
+          <div class="flow-dot">1</div>
+          <div>
+            <h4>主催者から招待リンクを受け取る</h4>
+            <p>メールやLINEで届くリンクをタップするだけ。アプリのインストールは不要です。</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-dot">2</div>
+          <div>
+            <h4>商品を登録する</h4>
+            <p>商品名・価格・カテゴリを入力。写真やオプション（トッピング・サイズ）も設定可能。</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-dot">3</div>
+          <div>
+            <h4>スタッフに役割を割り当て</h4>
+            <p>レジ係・厨房係・受渡し係。各スタッフのスマホでそれぞれの画面を開くだけ。</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-dot">4</div>
+          <div>
+            <h4>営業開始！</h4>
+            <p>準備完了。あとは商品をタップしてお客様を迎えるだけです。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="section-label">FAQ</div>
+    <h2>よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Wi-Fiがない屋外でも使えますか？</div>
+        <div class="faq-a">スマホのモバイル回線（4G/5G）があれば問題なくお使いいただけます。テザリングで他のスタッフ端末を接続することも可能です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">レシートプリンターは必要ですか？</div>
+        <div class="faq-a">不要です。番号札は画面に表示されるため、紙のレシートがなくても運用できます。もちろん、お手持ちのプリンターとの連携も今後対応予定です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">何台まで同時に使えますか？</div>
+        <div class="faq-a">台数に制限はありません。レジ2台＋厨房1台＋受渡し1台のような構成も、スマホの台数分だけ自由に拡張できます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">イベント当日にトラブルが起きたら？</div>
+        <div class="faq-a">デモモード搭載のため、万が一サーバーに問題が発生してもオフライン状態で基本操作が可能です。サポート窓口もイベント当日は対応します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">利用料金はかかりますか？</div>
+        <div class="faq-a">基本機能は無料でお使いいただけます。出店者様に費用負担はありません。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>まずはデモで触ってみてください</h2>
+    <p>アカウント登録なし・すべての画面を今すぐ体験できます。</p>
+    <button class="cta-btn" onclick="window.open('http://localhost:5175', '_blank')">デモを体験する</button>
+    <div class="cta-sub">※ デモモードではサンプルデータで全機能をお試しいただけます</div>
+  </section>
+
+  <footer>
+    &copy; 2026 イベントPOS. All rights reserved.
+  </footer>
+
+</body>
+</html>

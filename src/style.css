@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* 現場向け: ボタンの最小タッチターゲット48px */
+.btn-touch {
+  @apply min-h-[48px] min-w-[48px] flex items-center justify-center rounded-lg font-bold text-lg select-none active:scale-95 transition-transform;
+}
+
+/* 注文番号の大きな表示 */
+.order-number-display {
+  @apply text-7xl font-black tabular-nums tracking-tight;
+}
+
+/* 厨房画面用カード */
+.kitchen-card {
+  @apply rounded-xl p-4 shadow-lg border-2;
+}
+
+/* ステータス色 */
+.status-paid { @apply bg-blue-500 text-white; }
+.status-cooking { @apply bg-orange-500 text-white; }
+.status-ready { @apply bg-green-500 text-white animate-pulse; }
+.status-served { @apply bg-gray-400 text-white; }
+.status-cancelled { @apply bg-red-500 text-white; }
+
+/* 売り切れオーバーレイ */
+.sold-out-overlay {
+  @apply absolute inset-0 bg-gray-900/60 flex items-center justify-center rounded-lg;
+}
