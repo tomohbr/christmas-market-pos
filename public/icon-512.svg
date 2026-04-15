@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a3d1f"/>
+      <stop offset="100%" stop-color="#0d2410"/>
+    </linearGradient>
+    <radialGradient id="orn512" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="star512" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffde7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#f4d03f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="url(#bg512)"/>
+
+  <!-- Snow ground -->
+  <ellipse cx="256" cy="442" rx="142" ry="26" fill="#e8f4f8" opacity="0.85"/>
+  <ellipse cx="256" cy="438" rx="128" ry="13" fill="white" opacity="0.4"/>
+
+  <!-- Tree trunk -->
+  <rect x="228" y="396" width="56" height="52" rx="8" fill="#6b3d11"/>
+  <rect x="232" y="396" width="12" height="52" rx="4" fill="#8b5e2a" opacity="0.4"/>
+
+  <!-- Tree layer 3 - bottom -->
+  <polygon points="256,234 134,396 378,396" fill="#2d6a4f"/>
+  <polygon points="256,234 134,396 378,396" fill="#52b788" opacity="0.15"/>
+
+  <!-- Tree layer 2 - middle -->
+  <polygon points="256,150 166,298 346,298" fill="#2d6a4f"/>
+  <polygon points="256,150 166,298 346,298" fill="#52b788" opacity="0.2"/>
+
+  <!-- Tree layer 1 - top -->
+  <polygon points="256,70 190,210 322,210" fill="#2d6a4f"/>
+  <polygon points="256,70 190,210 322,210" fill="#74c69d" opacity="0.2"/>
+
+  <!-- Dark edge shading for depth -->
+  <polygon points="256,234 134,396 378,396" fill="none" stroke="#1a4d2e" stroke-width="2.5" opacity="0.7"/>
+  <polygon points="256,150 166,298 346,298" fill="none" stroke="#1a4d2e" stroke-width="2.5" opacity="0.7"/>
+  <polygon points="256,70 190,210 322,210" fill="none" stroke="#1a4d2e" stroke-width="2.5" opacity="0.7"/>
+
+  <!-- Red ornaments -->
+  <circle cx="198" cy="270" r="17" fill="#c1121f"/>
+  <circle cx="198" cy="270" r="17" fill="url(#orn512)" opacity="0.5"/>
+  <circle cx="315" cy="282" r="17" fill="#c1121f"/>
+  <circle cx="315" cy="282" r="17" fill="url(#orn512)" opacity="0.5"/>
+  <circle cx="170" cy="348" r="19" fill="#e63946"/>
+  <circle cx="170" cy="348" r="19" fill="url(#orn512)" opacity="0.45"/>
+  <circle cx="344" cy="360" r="19" fill="#c1121f"/>
+  <circle cx="344" cy="360" r="19" fill="url(#orn512)" opacity="0.45"/>
+  <circle cx="256" cy="374" r="15" fill="#e63946"/>
+  <circle cx="256" cy="374" r="15" fill="url(#orn512)" opacity="0.5"/>
+
+  <!-- Gold ornaments -->
+  <circle cx="256" cy="258" r="14" fill="#e9c46a"/>
+  <circle cx="256" cy="258" r="14" fill="url(#orn512)" opacity="0.5"/>
+  <circle cx="182" cy="318" r="13" fill="#f4a261"/>
+  <circle cx="330" cy="312" r="13" fill="#e9c46a"/>
+  <circle cx="222" cy="178" r="11" fill="#e9c46a"/>
+  <circle cx="290" cy="182" r="11" fill="#f4a261"/>
+  <circle cx="150" cy="382" r="12" fill="#f4a261"/>
+  <circle cx="362" cy="376" r="11" fill="#e9c46a"/>
+
+  <!-- Ornament caps -->
+  <rect x="196" y="255" width="4" height="9" rx="2" fill="#8b6914"/>
+  <rect x="313" y="267" width="4" height="9" rx="2" fill="#8b6914"/>
+  <rect x="168" y="331" width="4" height="11" rx="2" fill="#8b6914"/>
+  <rect x="342" y="343" width="4" height="11" rx="2" fill="#8b6914"/>
+  <rect x="254" y="360" width="4" height="9" rx="2" fill="#8b6914"/>
+  <rect x="254" y="245" width="4" height="8" rx="2" fill="#8b6914"/>
+
+  <!-- Ornament shine highlights -->
+  <circle cx="192" cy="264" r="5.5" fill="white" opacity="0.55"/>
+  <circle cx="309" cy="276" r="5.5" fill="white" opacity="0.55"/>
+  <circle cx="164" cy="342" r="6.5" fill="white" opacity="0.5"/>
+  <circle cx="338" cy="354" r="6.5" fill="white" opacity="0.5"/>
+
+  <!-- Fairy lights -->
+  <circle cx="190" cy="262" r="6" fill="#ffd700" opacity="0.9"/>
+  <circle cx="322" cy="274" r="6" fill="#ff6b6b" opacity="0.9"/>
+  <circle cx="162" cy="342" r="7" fill="#ffd700" opacity="0.9"/>
+  <circle cx="350" cy="354" r="6" fill="#ff6b6b" opacity="0.9"/>
+  <circle cx="256" cy="294" r="5.5" fill="#ffd700" opacity="0.85"/>
+  <circle cx="218" cy="198" r="5" fill="#ffd700" opacity="0.8"/>
+  <circle cx="294" cy="194" r="5" fill="#ff6b6b" opacity="0.8"/>
+  <circle cx="204" cy="386" r="5" fill="#ff6b6b" opacity="0.8"/>
+  <circle cx="308" cy="390" r="5" fill="#ffd700" opacity="0.8"/>
+  <!-- Light halos -->
+  <circle cx="190" cy="262" r="11" fill="#ffd700" opacity="0.18"/>
+  <circle cx="322" cy="274" r="11" fill="#ff6b6b" opacity="0.18"/>
+  <circle cx="162" cy="342" r="13" fill="#ffd700" opacity="0.18"/>
+
+  <!-- Star on top -->
+  <circle cx="256" cy="53" r="30" fill="url(#star512)" opacity="0.65"/>
+  <polygon points="256,26 262,46 284,46 267,58 273,78 256,66 239,78 245,58 228,46 250,46"
+           fill="#f4d03f" stroke="#d4ac0d" stroke-width="1.2"/>
+  <circle cx="253" cy="40" r="4.5" fill="white" opacity="0.7"/>
+
+  <!-- Snow layer on branches -->
+  <ellipse cx="256" cy="209" rx="33" ry="6" fill="white" opacity="0.3"/>
+  <ellipse cx="256" cy="297" rx="45" ry="7" fill="white" opacity="0.25"/>
+  <ellipse cx="256" cy="395" rx="62" ry="8" fill="white" opacity="0.2"/>
+
+  <!-- Background snowflakes -->
+  <g fill="white" opacity="0.3">
+    <circle cx="76" cy="96" r="3.5"/>
+    <circle cx="428" cy="82" r="3"/>
+    <circle cx="52" cy="196" r="2.5"/>
+    <circle cx="452" cy="176" r="3.5"/>
+    <circle cx="60" cy="318" r="3"/>
+    <circle cx="446" cy="298" r="2.5"/>
+    <circle cx="84" cy="418" r="3.5"/>
+    <circle cx="422" cy="428" r="3"/>
+    <circle cx="136" cy="58" r="2.5"/>
+    <circle cx="374" cy="50" r="2.5"/>
+    <circle cx="104" cy="462" r="2.5"/>
+    <circle cx="398" cy="466" r="3"/>
+  </g>
+
+  <!-- Subtle border -->
+  <rect width="512" height="512" rx="64" fill="none" stroke="#40916c" stroke-width="2" opacity="0.25"/>
+</svg>

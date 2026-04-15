@@ -33,19 +33,25 @@ interface CreateOrderData {
 
 export const orderService = {
   // 注文番号をatomicに採番して注文を作成
-  async createOrder(eventId: string, data: CreateOrderData): Promise<number> {
+  async createOrder(eventId: string, data: CreateOrderData, selectedNumber?: number): Promise<number> {
     const counterRef = doc(db, 'events', eventId, 'dailyCounters', todayDateKey())
 
     const orderNumber = await runTransaction(db, async (transaction) => {
-      const counterDoc = await transaction.get(counterRef)
       let nextNumber: number
 
-      if (counterDoc.exists()) {
-        nextNumber = counterDoc.data().lastOrderNumber + 1
-        transaction.update(counterRef, { lastOrderNumber: nextNumber })
+      if (selectedNumber != null) {
+        // 手動選択モード: カウンターは更新せず選択番号を使用
+        nextNumber = selectedNumber
       } else {
-        nextNumber = 1
-        transaction.set(counterRef, { lastOrderNumber: 1 })
+        // 自動採番モード
+        const counterDoc = await transaction.get(counterRef)
+        if (counterDoc.exists()) {
+          nextNumber = counterDoc.data().lastOrderNumber + 1
+          transaction.update(counterRef, { lastOrderNumber: nextNumber })
+        } else {
+          nextNumber = 1
+          transaction.set(counterRef, { lastOrderNumber: 1 })
+        }
       }
 
       const orderRef = doc(ordersRef(eventId))

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import type { Order, PaymentMethod, OrderType } from '@/types'
 import { formatPrice, formatTime } from '@/utils/format'
+import { generateOrdersCsv, downloadCsv } from '@/utils/csvExport'
 import SalesCharts from '@/components/charts/SalesCharts.vue'
 
 const props = defineProps<{
@@ -176,11 +177,11 @@ const maxHourlyCount = computed(() =>
 
 // 日別
 const salesByDate = computed(() => {
-  const map: Record<string, { date: string; count: number; total: number }> = {}
+  const map: Record<string, { date: string; orders: number; total: number }> = {}
   for (const o of filteredOrders.value) {
     const key = `${o.createdAt.getFullYear()}-${String(o.createdAt.getMonth() + 1).padStart(2, '0')}-${String(o.createdAt.getDate()).padStart(2, '0')}`
-    if (!map[key]) map[key] = { date: key, count: 0, total: 0 }
-    map[key].count++
+    if (!map[key]) map[key] = { date: key, orders: 0, total: 0 }
+    map[key].orders++
     map[key].total += o.totalAmount
   }
   return Object.values(map).sort((a, b) => a.date.localeCompare(b.date))
@@ -202,6 +203,13 @@ const orderTypeLabels: Record<string, string> = {
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr)
   return `${d.getMonth() + 1}/${d.getDate()}(${['日','月','火','水','木','金','土'][d.getDay()]})`
+}
+
+// CSVエクスポート
+function exportCsv() {
+  const csv = generateOrdersCsv(filteredOrders.value)
+  const today = new Date().toISOString().slice(0, 10)
+  downloadCsv(csv, `売上データ_${today}.csv`)
 }
 
 // フィルタリセット
@@ -227,13 +235,21 @@ const hasActiveFilters = computed(() =>
     <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-gray-800">絞り込み</h3>
-        <button
-          v-if="hasActiveFilters"
-          class="text-sm text-red-500 font-medium hover:underline"
-          @click="resetFilters"
-        >
-          条件リセット
-        </button>
+        <div class="flex items-center gap-3">
+          <button
+            class="text-sm text-blue-600 font-medium hover:underline"
+            @click="exportCsv"
+          >
+            CSVエクスポート
+          </button>
+          <button
+            v-if="hasActiveFilters"
+            class="text-sm text-red-500 font-medium hover:underline"
+            @click="resetFilters"
+          >
+            条件リセット
+          </button>
+        </div>
       </div>
 
       <!-- 期間プリセット -->
@@ -496,7 +512,7 @@ const hasActiveFilters = computed(() =>
                 :style="{ width: `${Math.max((d.total / maxDailyTotal) * 100, 12)}%` }"
               >
                 <span class="text-white text-xs font-bold whitespace-nowrap">
-                  {{ d.count }}件
+                  {{ d.orders }}件
                 </span>
               </div>
             </div>

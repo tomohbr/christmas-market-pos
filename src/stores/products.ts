@@ -48,6 +48,18 @@ export const useProductStore = defineStore('products', () => {
     await productService.updateProduct(eventId, productId, updates)
   }
 
+  async function addProduct(eventId: string, product: Omit<Product, 'id'>) {
+    await productService.addProduct(eventId, product)
+  }
+
+  async function updateProduct(eventId: string, productId: string, updates: Partial<Product>) {
+    await productService.updateProduct(eventId, productId, updates)
+  }
+
+  async function deleteProduct(eventId: string, productId: string) {
+    await productService.deleteProduct(eventId, productId)
+  }
+
   return {
     products,
     loading,
@@ -58,5 +70,8 @@ export const useProductStore = defineStore('products', () => {
     stopListening,
     toggleAvailability,
     updateStock,
+    addProduct,
+    updateProduct,
+    deleteProduct,
   }
 })

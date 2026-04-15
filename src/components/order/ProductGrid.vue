@@ -12,20 +12,20 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
     <button
       v-for="product in products"
       :key="product.id"
       :disabled="!product.available"
-      class="relative bg-white rounded-xl p-4 text-left shadow-sm border-2 border-transparent hover:border-red-400 active:scale-95 transition-all disabled:opacity-50 disabled:hover:border-transparent disabled:active:scale-100"
+      class="relative bg-white rounded-xl p-3 text-left shadow-sm border-2 border-transparent hover:border-red-400 active:scale-[0.97] transition-all disabled:opacity-50 disabled:hover:border-transparent disabled:active:scale-100 min-h-[80px]"
       @click="emit('select', product)"
     >
       <!-- 商品名 -->
-      <div class="font-bold text-gray-800 text-lg leading-tight mb-1">
+      <div class="font-bold text-gray-800 text-base leading-tight mb-1">
         {{ product.name }}
       </div>
       <!-- 価格 -->
-      <div class="text-red-600 font-black text-xl">
+      <div class="text-red-600 font-black text-lg">
         {{ formatPrice(product.price) }}
       </div>
       <!-- 在庫表示 -->

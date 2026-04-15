@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "localId": "admin-001",
+      "email": "admin@pos.local",
+      "displayName": "管理者",
+      "passwordHash": "YWRtaW4xMjM0",
+      "emailVerified": true
+    },
+    {
+      "localId": "cashier-001",
+      "email": "cashier@pos.local",
+      "displayName": "レジ担当",
+      "passwordHash": "Y2FzaGllcjEyMzQ=",
+      "emailVerified": true
+    },
+    {
+      "localId": "kitchen-001",
+      "email": "kitchen@pos.local",
+      "displayName": "厨房担当",
+      "passwordHash": "a2l0Y2hlbjEyMzQ=",
+      "emailVerified": true
+    },
+    {
+      "localId": "handover-001",
+      "email": "handover@pos.local",
+      "displayName": "受渡し担当",
+      "passwordHash": "aGFuZG92ZXIxMjM0",
+      "emailVerified": true
+    }
+  ]
+}

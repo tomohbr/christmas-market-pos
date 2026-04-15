@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useDemoStore } from '@/stores/demo'
 import type { SalesReport, Venue, Booth, DayRate, RateOverride } from '@/types'
 import { formatPrice, formatTime } from '@/utils/format'
+import { generateReportsCsv, generateSettlementCsv, downloadCsv, type SettlementRow } from '@/utils/csvExport'
 import AppHeader from '@/components/common/AppHeader.vue'
 import SalesCharts from '@/components/charts/SalesCharts.vue'
 
@@ -526,6 +527,29 @@ const boothsByVenue = computed(() => {
   }
   return map
 })
+
+// CSV出力
+function exportReportsCsv() {
+  const csv = generateReportsCsv(filteredReports.value)
+  const today = new Date().toISOString().slice(0, 10)
+  downloadCsv(csv, `売上レポート_${today}.csv`)
+}
+
+function exportSettlementCsv() {
+  const rows: SettlementRow[] = settlementData.value.map((s) => ({
+    boothName: s.boothName,
+    venueName: s.venueName,
+    category: s.category,
+    totalSales: s.totalSales,
+    commission: s.commission,
+    fixedFee: s.fixedFee,
+    totalFee: s.totalFee,
+    netToBooth: s.netToBooth,
+  }))
+  const csv = generateSettlementCsv(rows)
+  const today = new Date().toISOString().slice(0, 10)
+  downloadCsv(csv, `精算データ_${today}.csv`)
+}
 </script>
 
 <template>
@@ -641,6 +665,15 @@ const boothsByVenue = computed(() => {
 
       <!-- ===== 売上概要 ===== -->
       <div v-if="activeTab === 'dashboard'" class="space-y-4">
+        <!-- CSV出力 -->
+        <div class="flex justify-end">
+          <button
+            class="btn-touch px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm"
+            @click="exportReportsCsv"
+          >
+            売上レポートCSV
+          </button>
+        </div>
         <!-- サマリ -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
@@ -784,6 +817,15 @@ const boothsByVenue = computed(() => {
 
       <!-- ===== 精算・マージン ===== -->
       <div v-if="activeTab === 'settlement'" class="space-y-4">
+        <!-- CSV出力 -->
+        <div class="flex justify-end">
+          <button
+            class="btn-touch px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm"
+            @click="exportSettlementCsv"
+          >
+            精算データCSV
+          </button>
+        </div>
         <!-- 全体サマリ -->
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
           <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
@@ -866,7 +908,7 @@ const boothsByVenue = computed(() => {
                   <td class="py-2 text-gray-500 text-xs">{{ s.category }}</td>
                   <td class="py-2 text-right font-bold">{{ formatPrice(s.totalSales) }}</td>
                   <td class="py-2 text-right text-gray-600">{{ s.orderCount }}</td>
-                  <td class="py-2 text-right text-gray-600">{{ (s.commissionRate * 100).toFixed(0) }}%</td>
+                  <td class="py-2 text-right text-gray-600">{{ s.totalSales > 0 ? ((s.commission / s.totalSales) * 100).toFixed(0) : 0 }}%</td>
                   <td class="py-2 text-right text-yellow-700">{{ formatPrice(s.commission) }}</td>
                   <td class="py-2 text-right text-yellow-700">{{ formatPrice(s.fixedFee) }}</td>
                   <td class="py-2 text-right font-bold text-yellow-700">{{ formatPrice(s.totalFee) }}</td>

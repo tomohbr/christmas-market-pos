@@ -80,11 +80,11 @@ function backspace() {
       class="fixed inset-0 z-[100] flex items-center justify-center p-4"
     >
       <div class="absolute inset-0 bg-black/50" @click="emit('cancel')" />
-      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto overscroll-contain">
         <!-- ヘッダー -->
-        <div class="bg-blue-600 text-white px-5 py-4">
+        <div class="bg-blue-600 text-white px-4 py-3 sticky top-0 z-10">
           <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold">現金会計</h2>
+            <h2 class="text-lg font-bold">現金会計</h2>
             <button
               class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-500 text-2xl"
               @click="emit('cancel')"
@@ -92,13 +92,13 @@ function backspace() {
               ×
             </button>
           </div>
-          <div class="flex items-center justify-between mt-2">
-            <span class="text-blue-100">合計金額</span>
-            <span class="text-3xl font-black">{{ formatPrice(total) }}</span>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-blue-100 text-sm">合計</span>
+            <span class="text-2xl font-black">{{ formatPrice(total) }}</span>
           </div>
         </div>
 
-        <div class="p-5 space-y-4">
+        <div class="p-4 space-y-3">
           <!-- 預かり金額 -->
           <div>
             <label class="block text-sm font-bold text-gray-600 mb-1">お預かり</label>
@@ -133,12 +133,12 @@ function backspace() {
           </div>
 
           <!-- テンキー -->
-          <div class="grid grid-cols-3 gap-2">
+          <div class="grid grid-cols-3 gap-1.5">
             <button
               v-for="d in ['1','2','3','4','5','6','7','8','9','00','0','⌫']"
               :key="d"
               :class="[
-                'btn-touch rounded-xl text-xl h-14',
+                'rounded-xl text-xl h-12 font-bold select-none active:scale-95 transition-transform',
                 d === '⌫'
                   ? 'bg-gray-300 hover:bg-gray-400 text-gray-700'
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-800',
@@ -152,15 +152,15 @@ function backspace() {
           <!-- おつり表示 -->
           <div
             :class="[
-              'rounded-xl p-4 text-center',
+              'rounded-xl p-3 text-center',
               isEnough ? 'bg-green-50 border-2 border-green-300' : 'bg-red-50 border-2 border-red-300',
             ]"
           >
-            <div class="text-sm font-bold" :class="isEnough ? 'text-green-600' : 'text-red-600'">
+            <div class="text-xs font-bold" :class="isEnough ? 'text-green-600' : 'text-red-600'">
               {{ isEnough ? 'おつり' : '不足' }}
             </div>
             <div
-              class="text-4xl font-black tabular-nums"
+              class="text-3xl font-black tabular-nums"
               :class="isEnough ? 'text-green-700' : 'text-red-700'"
             >
               {{ formatPrice(Math.abs(change)) }}
@@ -168,7 +168,7 @@ function backspace() {
           </div>
 
           <!-- 確定ボタン -->
-          <div class="flex gap-3">
+          <div class="flex gap-2">
             <button
               class="btn-touch flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl"
               @click="emit('cancel')"
@@ -177,7 +177,7 @@ function backspace() {
             </button>
             <button
               :disabled="!isEnough"
-              class="btn-touch flex-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xl disabled:opacity-40"
+              class="btn-touch flex-[2] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xl disabled:opacity-40"
               @click="emit('confirm', change)"
             >
               会計確定

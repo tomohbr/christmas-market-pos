@@ -61,7 +61,7 @@ const hourlyChartData = computed(() => {
         fill: true,
         tension: 0.3,
         yAxisID: 'y1',
-      },
+      } as any,
     ],
   }
 })

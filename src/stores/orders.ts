@@ -25,9 +25,9 @@ export const useOrderStore = defineStore('orders', () => {
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
   )
 
-  const readyOrders = computed(() =>
+  const callingOrders = computed(() =>
     orders.value
-      .filter((o) => o.status === 'ready')
+      .filter((o) => o.status === 'calling')
       .sort((a, b) => a.updatedAt.getTime() - b.updatedAt.getTime())
   )
 
@@ -59,7 +59,8 @@ export const useOrderStore = defineStore('orders', () => {
       (c) =>
         c.productId === item.productId &&
         JSON.stringify(c.options) === JSON.stringify(item.options) &&
-        c.note === item.note
+        c.note === item.note &&
+        c.orderType === item.orderType
     )
     if (existing) {
       existing.quantity += item.quantity
@@ -98,24 +99,26 @@ export const useOrderStore = defineStore('orders', () => {
   async function submitOrder(
     eventId: string,
     paymentMethod: PaymentMethod,
-    createdBy: string
+    createdBy: string,
+    selectedNumber?: number,
   ): Promise<number> {
     if (cart.value.length === 0) throw new Error('カートが空です')
 
     const orderNumber = await orderService.createOrder(eventId, {
-      items: cart.value.map(({ productId, name, price, quantity, options, note }) => ({
+      items: cart.value.map(({ productId, name, price, quantity, options, note, orderType: itemType }) => ({
         productId,
         name,
         price,
         quantity,
         options,
         note,
+        orderType: itemType || orderType.value,
       })),
       totalAmount: cartTotal.value,
       paymentMethod,
       orderType: orderType.value,
       createdBy,
-    })
+    }, selectedNumber)
 
     clearCart()
     return orderNumber
@@ -147,7 +150,7 @@ export const useOrderStore = defineStore('orders', () => {
     orderType,
     activeOrders,
     kitchenOrders,
-    readyOrders,
+    callingOrders,
     todayOrders,
     todaySales,
     todayOrderCount,

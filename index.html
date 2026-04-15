@@ -3,11 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>イベントPOS</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#b91c1c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Glühwein POS" />
+    <title>Glühwein POS</title>
   </head>
   <body class="bg-gray-100">
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        // 古いSWを全解除してからキャッシュをクリアし、新しいSWを登録
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          var oldRemoved = false;
+          regs.forEach(function(reg) {
+            if (reg.scope.indexOf('/christmas-market-pos') !== -1) {
+              reg.unregister();
+              oldRemoved = true;
+            }
+          });
+          if (oldRemoved) {
+            caches.keys().then(function(names) {
+              names.forEach(function(name) { caches.delete(name); });
+            });
+          }
+        });
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>

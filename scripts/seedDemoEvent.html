@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Demo Event</title></head>
+<body>
+<h2>デモイベント登録</h2>
+<p>メールアドレスとパスワードでログインして、デモイベントを登録します。</p>
+<input id="email" placeholder="メールアドレス" style="display:block;margin:8px 0;padding:8px;width:300px" />
+<input id="password" type="password" placeholder="パスワード" style="display:block;margin:8px 0;padding:8px;width:300px" />
+<button onclick="run()" style="padding:10px 20px;font-size:16px">登録実行</button>
+<pre id="log" style="margin-top:16px;background:#f0f0f0;padding:16px;min-height:200px"></pre>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js'
+import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js'
+import { getFirestore, doc, setDoc, collection, getDocs, Timestamp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js'
+
+const app = initializeApp({
+  apiKey: 'AIzaSyD8HwqaLLcb0TMEC0fRujOwoqXodll58iw',
+  authDomain: 'my-pos-app-6a0eb.firebaseapp.com',
+  projectId: 'my-pos-app-6a0eb',
+})
+const auth = getAuth(app)
+const db = getFirestore(app)
+
+function log(msg) { document.getElementById('log').textContent += msg + '\n' }
+
+window.run = async function() {
+  const email = document.getElementById('email').value
+  const password = document.getElementById('password').value
+  try {
+    log('ログイン中...')
+    const cred = await signInWithEmailAndPassword(auth, email, password)
+    log('ログイン成功: ' + cred.user.email)
+
+    // デモイベント登録
+    log('デモイベントを登録中...')
+    await setDoc(doc(db, 'events', 'demo-event'), {
+      name: 'デモイベント',
+      startDate: Timestamp.fromDate(new Date('2026-04-01')),
+      endDate: Timestamp.fromDate(new Date('2026-04-30')),
+      status: 'active',
+      settings: { boothName: '', currency: 'JPY', taxRate: 0.10 },
+    }, { merge: true })
+    log('デモイベント登録完了!')
+
+    // ユーザー一覧確認
+    log('\nユーザー一覧:')
+    const snap = await getDocs(collection(db, 'users'))
+    snap.forEach(d => {
+      const data = d.data()
+      log(`  ${data.email || d.id} - role: ${data.role}, eventId: ${data.eventId}`)
+    })
+
+    log('\n完了!')
+  } catch(e) {
+    log('エラー: ' + e.message)
+  }
+}
+</script>
+</body>
+</html>

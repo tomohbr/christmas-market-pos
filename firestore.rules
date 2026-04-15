@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 認証済みユーザーのみアクセス可能
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // イベント一覧（認証済みならアクセス可）
+    match /events/{eventId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // イベントデータ（認証済みならアクセス可）
+    match /events/{eventId}/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

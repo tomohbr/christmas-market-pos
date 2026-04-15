@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!--
+    MASKABLE icon: full-bleed background, NO rounded corners.
+    Safe zone = center 80% circle (radius ~205px from center 256,256).
+    All meaningful content kept inside that safe zone.
+  -->
+  <defs>
+    <linearGradient id="bgMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a3d1f"/>
+      <stop offset="100%" stop-color="#0d2410"/>
+    </linearGradient>
+    <radialGradient id="ornMask" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="starMask" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffde7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#f4d03f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Full-bleed background (NO rx for maskable) -->
+  <rect width="512" height="512" fill="url(#bgMask)"/>
+
+  <!-- Safe zone content starts ~102px from edges, ending ~410px -->
+  <!-- Snow ground (inside safe zone) -->
+  <ellipse cx="256" cy="398" rx="110" ry="20" fill="#e8f4f8" opacity="0.85"/>
+  <ellipse cx="256" cy="394" rx="98" ry="10" fill="white" opacity="0.4"/>
+
+  <!-- Tree trunk -->
+  <rect x="238" y="366" width="36" height="36" rx="6" fill="#6b3d11"/>
+  <rect x="241" y="366" width="9" height="36" rx="3" fill="#8b5e2a" opacity="0.4"/>
+
+  <!-- Tree layer 3 - bottom (safe zone: x 146..366, y 234..370) -->
+  <polygon points="256,234 146,368 366,368" fill="#2d6a4f"/>
+  <polygon points="256,234 146,368 366,368" fill="#52b788" opacity="0.15"/>
+  <polygon points="256,234 146,368 366,368" fill="none" stroke="#1a4d2e" stroke-width="2" opacity="0.6"/>
+
+  <!-- Tree layer 2 - middle -->
+  <polygon points="256,172 178,278 334,278" fill="#2d6a4f"/>
+  <polygon points="256,172 178,278 334,278" fill="#52b788" opacity="0.2"/>
+  <polygon points="256,172 178,278 334,278" fill="none" stroke="#1a4d2e" stroke-width="2" opacity="0.6"/>
+
+  <!-- Tree layer 1 - top -->
+  <polygon points="256,112 200,210 312,210" fill="#2d6a4f"/>
+  <polygon points="256,112 200,210 312,210" fill="#74c69d" opacity="0.2"/>
+  <polygon points="256,112 200,210 312,210" fill="none" stroke="#1a4d2e" stroke-width="2" opacity="0.6"/>
+
+  <!-- Red ornaments -->
+  <circle cx="210" cy="256" r="13" fill="#c1121f"/>
+  <circle cx="210" cy="256" r="13" fill="url(#ornMask)" opacity="0.5"/>
+  <circle cx="302" cy="264" r="13" fill="#c1121f"/>
+  <circle cx="302" cy="264" r="13" fill="url(#ornMask)" opacity="0.5"/>
+  <circle cx="188" cy="318" r="15" fill="#e63946"/>
+  <circle cx="188" cy="318" r="15" fill="url(#ornMask)" opacity="0.45"/>
+  <circle cx="326" cy="326" r="15" fill="#c1121f"/>
+  <circle cx="326" cy="326" r="15" fill="url(#ornMask)" opacity="0.45"/>
+  <circle cx="256" cy="346" r="12" fill="#e63946"/>
+  <circle cx="256" cy="346" r="12" fill="url(#ornMask)" opacity="0.5"/>
+
+  <!-- Gold ornaments -->
+  <circle cx="256" cy="238" r="11" fill="#e9c46a"/>
+  <circle cx="256" cy="238" r="11" fill="url(#ornMask)" opacity="0.5"/>
+  <circle cx="194" cy="294" r="10" fill="#f4a261"/>
+  <circle cx="318" cy="288" r="10" fill="#e9c46a"/>
+  <circle cx="232" cy="164" r="9" fill="#e9c46a"/>
+  <circle cx="280" cy="167" r="9" fill="#f4a261"/>
+
+  <!-- Ornament caps -->
+  <rect x="208" y="244" width="4" height="7" rx="2" fill="#8b6914"/>
+  <rect x="300" y="252" width="4" height="7" rx="2" fill="#8b6914"/>
+  <rect x="186" y="305" width="4" height="8" rx="2" fill="#8b6914"/>
+  <rect x="324" y="313" width="4" height="8" rx="2" fill="#8b6914"/>
+  <rect x="254" y="335" width="4" height="7" rx="2" fill="#8b6914"/>
+  <rect x="254" y="228" width="4" height="6" rx="2" fill="#8b6914"/>
+
+  <!-- Ornament shines -->
+  <circle cx="205" cy="251" r="4" fill="white" opacity="0.55"/>
+  <circle cx="297" cy="259" r="4" fill="white" opacity="0.55"/>
+  <circle cx="183" cy="313" r="5" fill="white" opacity="0.5"/>
+  <circle cx="321" cy="321" r="5" fill="white" opacity="0.5"/>
+
+  <!-- Fairy lights -->
+  <circle cx="202" cy="248" r="5" fill="#ffd700" opacity="0.9"/>
+  <circle cx="308" cy="257" r="5" fill="#ff6b6b" opacity="0.9"/>
+  <circle cx="180" cy="313" r="6" fill="#ffd700" opacity="0.9"/>
+  <circle cx="332" cy="320" r="5" fill="#ff6b6b" opacity="0.9"/>
+  <circle cx="256" cy="270" r="4.5" fill="#ffd700" opacity="0.85"/>
+  <circle cx="225" cy="182" r="4" fill="#ffd700" opacity="0.8"/>
+  <circle cx="287" cy="178" r="4" fill="#ff6b6b" opacity="0.8"/>
+  <!-- Light halos -->
+  <circle cx="202" cy="248" r="9" fill="#ffd700" opacity="0.18"/>
+  <circle cx="308" cy="257" r="9" fill="#ff6b6b" opacity="0.18"/>
+  <circle cx="180" cy="313" r="11" fill="#ffd700" opacity="0.18"/>
+
+  <!-- Star on top -->
+  <circle cx="256" cy="98" r="22" fill="url(#starMask)" opacity="0.65"/>
+  <polygon points="256,78 261,93 277,93 264,102 269,117 256,108 243,117 248,102 235,93 251,93"
+           fill="#f4d03f" stroke="#d4ac0d" stroke-width="1"/>
+  <circle cx="254" cy="88" r="3.5" fill="white" opacity="0.7"/>
+
+  <!-- Snow on branches -->
+  <ellipse cx="256" cy="209" rx="26" ry="5" fill="white" opacity="0.3"/>
+  <ellipse cx="256" cy="277" rx="36" ry="5.5" fill="white" opacity="0.25"/>
+  <ellipse cx="256" cy="367" rx="50" ry="6" fill="white" opacity="0.2"/>
+
+  <!-- Background snowflakes (can extend outside safe zone) -->
+  <g fill="white" opacity="0.25">
+    <circle cx="60" cy="80" r="3.5"/>
+    <circle cx="440" cy="70" r="3"/>
+    <circle cx="40" cy="200" r="3"/>
+    <circle cx="464" cy="180" r="3.5"/>
+    <circle cx="48" cy="340" r="3"/>
+    <circle cx="458" cy="320" r="2.5"/>
+    <circle cx="72" cy="450" r="3.5"/>
+    <circle cx="434" cy="444" r="3"/>
+    <circle cx="120" cy="40" r="2.5"/>
+    <circle cx="386" cy="34" r="2.5"/>
+    <circle cx="96" cy="476" r="2.5"/>
+    <circle cx="408" cy="478" r="3"/>
+  </g>
+</svg>

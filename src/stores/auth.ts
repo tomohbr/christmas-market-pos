@@ -82,6 +82,12 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = false
   }
 
+  function setEventId(eventId: string) {
+    if (user.value) {
+      user.value = { ...user.value, eventId }
+    }
+  }
+
   return {
     user,
     loading,
@@ -93,5 +99,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     loginAsDemo,
+    setEventId,
   }
 })

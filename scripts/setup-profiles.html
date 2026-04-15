@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><title>POS プロフィール設定</title></head>
+<body>
+<h1>POS プロフィール設定</h1>
+<div id="log" style="white-space:pre-wrap; font-family:monospace; background:#f0f0f0; padding:16px; border-radius:8px;"></div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js'
+import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js'
+
+const app = initializeApp({
+  apiKey: 'AIzaSyD8HwqaLLcb0TMEC0fRujOwoqXodll58iw',
+  authDomain: 'my-pos-app-6a0eb.firebaseapp.com',
+  projectId: 'my-pos-app-6a0eb',
+})
+
+const db = getFirestore(app)
+const logEl = document.getElementById('log')
+function log(msg) { logEl.textContent += msg + '\n' }
+
+const EVENT_ID = 'breakfast-event-2026'
+
+const users = [
+  { uid: 'Tojsx4A8lmQQkg6WtzGID6IvfKE2', email: 'shibahara.724@gmail.com', displayName: '柴原', role: 'admin' },
+  { uid: 'ZL9o6ftdIjWBMoqSF3LGA1OpZph1', email: 'info@hibariko-bo.com', displayName: 'ひばり工房', role: 'organizer' },
+]
+
+for (const u of users) {
+  try {
+    await setDoc(doc(db, 'users', u.uid), {
+      displayName: u.displayName,
+      role: u.role,
+      eventId: EVENT_ID,
+    }, { merge: true })
+    log(`✓ ${u.email} → role: ${u.role}, eventId: ${EVENT_ID}`)
+  } catch (e) {
+    log(`✗ ${u.email}: ${e.message}`)
+  }
+}
+
+log('\n=== 完了 ===')
+log('shibahara.724@gmail.com → 管理者(admin) → レジ・厨房・管理画面')
+log('info@hibariko-bo.com → 主催者(organizer) → 会場全体の売上ダッシュボード')
+log('https://tomohbr.github.io/christmas-market-pos/login でログインできます。')
+</script>
+</body>
+</html>

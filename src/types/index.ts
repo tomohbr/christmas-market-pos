@@ -33,7 +33,7 @@ export interface Product {
 }
 
 // === 注文 ===
-export type OrderStatus = 'paid' | 'cooking' | 'ready' | 'served' | 'cancelled'
+export type OrderStatus = 'paid' | 'cooking' | 'calling' | 'served' | 'cancelled'
 export type PaymentMethod = 'cash' | 'cashless' | 'other'
 export type OrderType = 'eat_in' | 'takeout' | 'goods'
 
@@ -49,6 +49,7 @@ export interface OrderItem {
   quantity: number
   options: OrderItemOption[]
   note: string
+  orderType: OrderType  // 商品ごとの店内/テイクアウト区分
 }
 
 // カート用（注文確定前）
@@ -63,7 +64,7 @@ export interface Order {
   items: OrderItem[]
   totalAmount: number
   paymentMethod: PaymentMethod
-  orderType: OrderType
+  orderType: OrderType  // 注文全体のデフォルト（後方互換）
   createdAt: Date
   updatedAt: Date
   servedAt: Date | null
@@ -72,11 +73,14 @@ export interface Order {
 }
 
 // === イベント ===
+export type EventStatus = 'upcoming' | 'active' | 'ended'
+
 export interface EventInfo {
   id: string
   name: string
   startDate: Date
   endDate: Date
+  status: EventStatus
   settings: EventSettings
 }
 

@@ -2,7 +2,7 @@
 import type { CartItem, PaymentMethod, OrderType } from '@/types'
 import { formatPrice } from '@/utils/format'
 
-defineProps<{
+const props = defineProps<{
   items: CartItem[]
   total: number
   orderType: OrderType
@@ -14,12 +14,24 @@ const emit = defineEmits<{
   clear: []
   submit: [paymentMethod: PaymentMethod]
   updateOrderType: [orderType: OrderType]
+  updateItemOrderType: [cartId: string, orderType: OrderType]
 }>()
 
 const orderTypeLabels: Record<OrderType, string> = {
   eat_in: '店内',
-  takeout: 'テイクアウト',
+  takeout: '持帰',
   goods: '物販',
+}
+
+const orderTypeShort: Record<OrderType, { label: string; color: string }> = {
+  eat_in: { label: '店内', color: 'bg-blue-500 text-white' },
+  takeout: { label: '持帰', color: 'bg-orange-500 text-white' },
+  goods: { label: '物販', color: 'bg-gray-500 text-white' },
+}
+
+function toggleItemType(cartId: string, current: OrderType) {
+  const next = current === 'eat_in' ? 'takeout' : 'eat_in'
+  emit('updateItemOrderType', cartId, next)
 }
 </script>
 
@@ -40,13 +52,14 @@ const orderTypeLabels: Record<OrderType, string> = {
       </button>
     </div>
 
-    <!-- 注文タイプ -->
-    <div class="px-4 py-2 border-b border-gray-100 flex gap-2">
+    <!-- 次に追加する商品のデフォルト区分 -->
+    <div class="px-4 py-2 border-b border-gray-100 flex gap-2 items-center">
+      <span class="text-xs text-gray-500 shrink-0">次の追加:</span>
       <button
         v-for="(label, key) in orderTypeLabels"
         :key="key"
         :class="[
-          'flex-1 py-2 rounded-lg text-sm font-bold transition-colors',
+          'flex-1 py-1.5 rounded-lg text-sm font-bold transition-colors',
           orderType === key
             ? 'bg-red-600 text-white'
             : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
@@ -65,33 +78,48 @@ const orderTypeLabels: Record<OrderType, string> = {
       <div
         v-for="item in items"
         :key="item.cartId"
-        class="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0"
+        class="py-3 border-b border-gray-100 last:border-0"
       >
-        <div class="flex-1 min-w-0">
-          <div class="font-bold text-gray-800 truncate">{{ item.name }}</div>
-          <div v-if="item.options.length" class="text-xs text-gray-500">
-            {{ item.options.map((o) => o.name).join(', ') }}
+        <div class="flex items-start gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="font-bold text-gray-800 truncate">{{ item.name }}</div>
+              <!-- 商品ごとの区分バッジ（タップで切替） -->
+              <button
+                :class="[
+                  'px-2 py-0.5 rounded text-xs font-bold shrink-0 active:scale-95 transition-transform',
+                  orderTypeShort[item.orderType || 'takeout'].color,
+                ]"
+                @click="toggleItemType(item.cartId, item.orderType || 'takeout')"
+                :title="'タップで切替'"
+              >
+                {{ orderTypeShort[item.orderType || 'takeout'].label }}
+              </button>
+            </div>
+            <div v-if="item.options.length" class="text-xs text-gray-500">
+              {{ item.options.map((o) => o.name).join(', ') }}
+            </div>
+            <div v-if="item.note" class="text-xs text-orange-500">{{ item.note }}</div>
+            <div class="text-red-600 font-bold">
+              {{ formatPrice((item.price + item.options.reduce((s, o) => s + o.price, 0)) * item.quantity) }}
+            </div>
           </div>
-          <div v-if="item.note" class="text-xs text-orange-500">{{ item.note }}</div>
-          <div class="text-red-600 font-bold">
-            {{ formatPrice((item.price + item.options.reduce((s, o) => s + o.price, 0)) * item.quantity) }}
+          <!-- 数量変更 -->
+          <div class="flex items-center gap-1 shrink-0">
+            <button
+              class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg text-xl text-gray-700 font-bold flex items-center justify-center active:scale-95"
+              @click="emit('updateQuantity', item.cartId, item.quantity - 1)"
+            >
+              −
+            </button>
+            <span class="w-8 text-center font-bold text-lg">{{ item.quantity }}</span>
+            <button
+              class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg text-xl text-gray-700 font-bold flex items-center justify-center active:scale-95"
+              @click="emit('updateQuantity', item.cartId, item.quantity + 1)"
+            >
+              ＋
+            </button>
           </div>
-        </div>
-        <!-- 数量変更 -->
-        <div class="flex items-center gap-1">
-          <button
-            class="btn-touch w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg text-xl text-gray-700"
-            @click="emit('updateQuantity', item.cartId, item.quantity - 1)"
-          >
-            −
-          </button>
-          <span class="w-8 text-center font-bold text-lg">{{ item.quantity }}</span>
-          <button
-            class="btn-touch w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg text-xl text-gray-700"
-            @click="emit('updateQuantity', item.cartId, item.quantity + 1)"
-          >
-            ＋
-          </button>
         </div>
       </div>
     </div>

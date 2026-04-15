@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import type { Order, OrderStatus } from '@/types'
 import { formatOrderNumber, formatTime, formatElapsed } from '@/utils/format'
 import { useSettingsStore } from '@/stores/settings'
+import { usePrint } from '@/composables/usePrint'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const settingsStore = useSettingsStore()
+const { printOrder } = usePrint()
 
 const orderTypeLabels: Record<string, string> = {
   eat_in: '店内',
@@ -22,57 +24,63 @@ const orderTypeLabels: Record<string, string> = {
   goods: '物販',
 }
 
-// 厨房で受渡しまでやるか、受渡し端末を別で使うか
 const kitchenHandover = computed(() => settingsStore.settings.kitchenHandover)
+const skipCooking = computed(() => settingsStore.settings.skipCooking)
 
 // 戻る先
-const prevStatus: Record<string, OrderStatus> = {
-  cooking: 'paid',
-  ready: 'cooking',
-}
+const prevStatus = computed((): Record<string, OrderStatus | undefined> => {
+  if (skipCooking.value) {
+    return { calling: 'paid' as OrderStatus }
+  }
+  return { cooking: 'paid' as OrderStatus, calling: 'cooking' as OrderStatus }
+})
 
-// 次のステータス（設定によって変わる）
+
+// 次のステータス
+// 調理あり: paid → cooking → calling → served
+// 調理なし: paid → calling → served
 const nextTarget = computed((): OrderStatus | null => {
   const s = props.order.status
-  if (s === 'paid') return 'cooking'
+
+  if (s === 'paid') {
+    return skipCooking.value ? 'calling' : 'cooking'
+  }
   if (s === 'cooking') {
-    // 厨房完結モード → served / 受渡し端末別モード → ready
-    return kitchenHandover.value ? 'served' : 'ready'
+    return 'calling'
+  }
+  if (s === 'calling') {
+    return 'served'
   }
   return null
 })
 
 const nextLabel = computed(() => {
   const s = props.order.status
-  if (s === 'paid') return '🍳 調理開始'
+
+  if (s === 'paid') {
+    return skipCooking.value ? '📢 呼び出し' : '🍳 調理開始'
+  }
   if (s === 'cooking') {
-    return kitchenHandover.value ? '📦 受渡し' : '✅ 完成'
+    return '📢 呼び出し'
+  }
+  if (s === 'calling') {
+    return '📦 受渡し済み'
   }
   return ''
 })
 
 const nextColor = computed(() => {
   const s = props.order.status
-  if (s === 'paid') return 'bg-orange-500 hover:bg-orange-600'
-  if (s === 'cooking') return 'bg-green-500 hover:bg-green-600'
-  return ''
+  if (s === 'paid' && !skipCooking.value) return 'bg-orange-500 hover:bg-orange-600'
+  if (s === 'calling') return 'bg-gray-500 hover:bg-gray-600'
+  return 'bg-green-500 hover:bg-green-600'
 })
 
-// 確認ダイアログが必要か（受渡し済みにする時だけ）
-const needsConfirm = computed(() =>
-  props.order.status === 'cooking' && kitchenHandover.value
-)
-
 const showCancelConfirm = ref(false)
-const showServeConfirm = ref(false)
 
 function handleMainAction() {
   if (!nextTarget.value) return
-  if (needsConfirm.value) {
-    showServeConfirm.value = true
-  } else {
-    emit('updateStatus', props.order.id, nextTarget.value)
-  }
+  emit('updateStatus', props.order.id, nextTarget.value)
 }
 </script>
 
@@ -84,7 +92,9 @@ function handleMainAction() {
         ? 'border-blue-400 bg-blue-50'
         : order.status === 'cooking'
           ? 'border-orange-400 bg-orange-50'
-          : 'border-gray-300 bg-white',
+          : order.status === 'calling'
+            ? 'border-green-400 bg-green-50'
+            : 'border-gray-300 bg-white',
     ]"
   >
     <!-- ヘッダー -->
@@ -113,9 +123,18 @@ function handleMainAction() {
         class="flex items-start justify-between bg-white rounded-lg p-3 border border-gray-100"
       >
         <div class="flex-1">
-          <div class="font-bold text-gray-800 text-lg">
-            {{ item.name }}
-            <span class="text-red-600 ml-1">×{{ item.quantity }}</span>
+          <div class="font-bold text-gray-800 text-lg flex items-center gap-2 flex-wrap">
+            <span>{{ item.name }}</span>
+            <span class="text-red-600">×{{ item.quantity }}</span>
+            <span
+              v-if="item.orderType"
+              :class="[
+                'text-xs px-1.5 py-0.5 rounded font-bold',
+                item.orderType === 'eat_in' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700',
+              ]"
+            >
+              {{ item.orderType === 'eat_in' ? '店内' : '持帰' }}
+            </span>
           </div>
           <div v-if="item.options.length" class="text-sm text-blue-600 mt-0.5">
             {{ item.options.map((o) => o.name).join(', ') }}
@@ -138,9 +157,17 @@ function handleMainAction() {
       </button>
 
       <button
+        class="btn-touch w-14 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-xl text-sm shrink-0"
+        @click="printOrder(order)"
+        title="レシート印刷"
+      >
+        🖨
+      </button>
+
+      <button
         v-if="prevStatus[order.status]"
         class="btn-touch w-14 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-xl text-sm shrink-0"
-        @click="emit('updateStatus', order.id, prevStatus[order.status])"
+        @click="emit('updateStatus', order.id, prevStatus[order.status] as OrderStatus)"
         title="前の状態に戻す"
       >
         ↩
@@ -165,14 +192,5 @@ function handleMainAction() {
       @cancel="showCancelConfirm = false"
     />
 
-    <ConfirmDialog
-      :show="showServeConfirm"
-      title="受渡し確認"
-      :message="`#${formatOrderNumber(order.orderNumber)} を受渡し済みにしますか？`"
-      confirm-label="受渡し済み"
-      confirm-class="bg-green-600 hover:bg-green-700"
-      @confirm="emit('updateStatus', order.id, 'served'); showServeConfirm = false"
-      @cancel="showServeConfirm = false"
-    />
   </div>
 </template>

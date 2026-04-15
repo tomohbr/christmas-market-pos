@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* iOS safe area */
+html {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* iOS input zoom 防止: font-size 16px 未満だとズームされる */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* スクロール改善 */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* タップハイライト除去 */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* 現場向け: ボタンの最小タッチターゲット48px */
 .btn-touch {
   @apply min-h-[48px] min-w-[48px] flex items-center justify-center rounded-lg font-bold text-lg select-none active:scale-95 transition-transform;
@@ -18,11 +39,16 @@
 /* ステータス色 */
 .status-paid { @apply bg-blue-500 text-white; }
 .status-cooking { @apply bg-orange-500 text-white; }
-.status-ready { @apply bg-green-500 text-white animate-pulse; }
+.status-calling { @apply bg-green-500 text-white animate-pulse; }
 .status-served { @apply bg-gray-400 text-white; }
 .status-cancelled { @apply bg-red-500 text-white; }
 
 /* 売り切れオーバーレイ */
 .sold-out-overlay {
   @apply absolute inset-0 bg-gray-900/60 flex items-center justify-center rounded-lg;
+}
+
+/* モバイルカートバーの余白確保 */
+.has-cart-bar {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
 }

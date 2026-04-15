@@ -13,7 +13,7 @@ const pathToRole: Record<string, UserRole> = {
 }
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -28,25 +28,25 @@ const router = createRouter({
       path: '/order',
       name: 'order',
       component: () => import('@/views/OrderView.vue'),
-      meta: { requiresAuth: true, roles: ['admin', 'cashier'] as UserRole[] },
+      meta: { requiresAuth: true, roles: ['admin', 'cashier', 'kitchen', 'handover'] as UserRole[] },
     },
     {
       path: '/kitchen',
       name: 'kitchen',
       component: () => import('@/views/KitchenView.vue'),
-      meta: { requiresAuth: true, roles: ['admin', 'kitchen'] as UserRole[] },
+      meta: { requiresAuth: true, roles: ['admin', 'cashier', 'kitchen', 'handover'] as UserRole[] },
     },
     {
       path: '/handover',
       name: 'handover',
       component: () => import('@/views/HandoverView.vue'),
-      meta: { requiresAuth: true, roles: ['admin', 'handover', 'kitchen'] as UserRole[] },
+      meta: { requiresAuth: true, roles: ['admin', 'cashier', 'kitchen', 'handover'] as UserRole[] },
     },
     {
       path: '/admin',
       name: 'admin',
       component: () => import('@/views/AdminView.vue'),
-      meta: { requiresAuth: true, roles: ['admin'] as UserRole[] },
+      meta: { requiresAuth: true, roles: ['admin', 'cashier', 'kitchen', 'handover'] as UserRole[] },
     },
     {
       path: '/organizer',

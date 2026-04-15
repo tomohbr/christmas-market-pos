@@ -33,7 +33,7 @@ const servedOrders = computed(() => {
 })
 
 // フィルター
-const filter = ref<'all' | 'paid' | 'cooking'>('all')
+const filter = ref<'all' | 'paid' | 'cooking' | 'calling'>('all')
 const filteredOrders = computed(() => {
   if (filter.value === 'all') return allActiveOrders.value
   return allActiveOrders.value.filter((o) => o.status === filter.value)
@@ -44,6 +44,9 @@ const paidCount = computed(() =>
 )
 const cookingCount = computed(() =>
   allActiveOrders.value.filter((o) => o.status === 'cooking').length
+)
+const callingCount = computed(() =>
+  allActiveOrders.value.filter((o) => o.status === 'calling').length
 )
 
 function handleUpdateStatus(orderId: string, status: OrderStatus) {
@@ -70,7 +73,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 flex flex-col pb-14">
+  <div class="min-h-screen bg-gray-900 flex flex-col" style="padding-bottom: calc(3.5rem + env(safe-area-inset-bottom))">
     <AppHeader title="🍳 厨房" />
 
     <!-- フィルターバー -->
@@ -107,6 +110,17 @@ onUnmounted(() => {
         @click="filter = 'cooking'"
       >
         調理中 ({{ cookingCount }})
+      </button>
+      <button
+        :class="[
+          'btn-touch px-5 rounded-xl text-base whitespace-nowrap',
+          filter === 'calling'
+            ? 'bg-green-500 text-white'
+            : 'bg-gray-700 text-gray-300 hover:bg-gray-600',
+        ]"
+        @click="filter = 'calling'"
+      >
+        呼び出し ({{ callingCount }})
       </button>
     </div>
 

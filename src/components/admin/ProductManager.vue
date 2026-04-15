@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import type { Product, ProductType } from '@/types'
 import { formatPrice } from '@/utils/format'
 import AppModal from '@/components/common/AppModal.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
 const props = defineProps<{
   products: Product[]
@@ -86,6 +87,23 @@ const categoryOptions = computed(() => {
   const cats = new Set(props.products.map((p) => p.category))
   return Array.from(cats)
 })
+
+// 商品削除
+const showDeleteConfirm = ref(false)
+const deletingProduct = ref<Product | null>(null)
+
+function confirmDelete(product: Product) {
+  deletingProduct.value = product
+  showDeleteConfirm.value = true
+}
+
+function handleDelete() {
+  if (deletingProduct.value) {
+    emit('deleteProduct', deletingProduct.value.id)
+  }
+  showDeleteConfirm.value = false
+  deletingProduct.value = null
+}
 </script>
 
 <template>
@@ -147,6 +165,12 @@ const categoryOptions = computed(() => {
             @click="openEditForm(product)"
           >
             ✏️
+          </button>
+          <button
+            class="btn-touch w-10 h-10 bg-red-50 hover:bg-red-100 rounded-lg text-red-500"
+            @click="confirmDelete(product)"
+          >
+            🗑️
           </button>
         </div>
       </div>
@@ -257,5 +281,16 @@ const categoryOptions = computed(() => {
         </button>
       </form>
     </AppModal>
+
+    <!-- 削除確認ダイアログ -->
+    <ConfirmDialog
+      :show="showDeleteConfirm"
+      title="商品を削除"
+      :message="`「${deletingProduct?.name}」を削除しますか？この操作は元に戻せません。`"
+      confirm-label="削除する"
+      confirm-class="bg-red-600 hover:bg-red-700"
+      @confirm="handleDelete"
+      @cancel="showDeleteConfirm = false"
+    />
   </div>
 </template>

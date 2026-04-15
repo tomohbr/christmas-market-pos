@@ -9,8 +9,8 @@ defineProps<{
 const statusConfig: Record<OrderStatus, { label: string; class: string }> = {
   paid: { label: '会計済', class: 'status-paid' },
   cooking: { label: '調理中', class: 'status-cooking' },
-  ready: { label: '完成', class: 'status-ready' },
-  served: { label: '提供済', class: 'status-served' },
+  calling: { label: '呼び出し', class: 'status-calling' },
+  served: { label: '受渡済', class: 'status-served' },
   cancelled: { label: '取消', class: 'status-cancelled' },
 }
 </script>

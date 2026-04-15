@@ -168,13 +168,15 @@ export const useDemoStore = defineStore('demo', () => {
     totalAmount: number,
     paymentMethod: PaymentMethod,
     orderType: OrderType,
-    createdBy: string
+    createdBy: string,
+    selectedNumber?: number,
   ): number {
-    orderCounter++
+    const num = selectedNumber ?? ++orderCounter
+    if (!selectedNumber) orderCounter = num
     const now = new Date()
     orders.value.push({
-      id: `demo-${orderCounter}-${Date.now()}`,
-      orderNumber: orderCounter,
+      id: `demo-${num}-${Date.now()}`,
+      orderNumber: num,
       status: 'paid',
       items,
       totalAmount,
@@ -197,7 +199,7 @@ export const useDemoStore = defineStore('demo', () => {
     }
 
     persist()
-    return orderCounter
+    return num
   }
 
   function updateOrderStatus(orderId: string, status: OrderStatus) {
@@ -241,9 +243,9 @@ export const useDemoStore = defineStore('demo', () => {
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
   )
 
-  const readyOrders = computed(() =>
+  const callingOrders = computed(() =>
     orders.value
-      .filter((o) => o.status === 'ready')
+      .filter((o) => o.status === 'calling')
       .sort((a, b) => a.updatedAt.getTime() - b.updatedAt.getTime())
   )
 
@@ -321,7 +323,7 @@ export const useDemoStore = defineStore('demo', () => {
     categories,
     activeOrders,
     kitchenOrders,
-    readyOrders,
+    callingOrders,
     todaySales,
     todayOrderCount,
     enableDemoMode,
