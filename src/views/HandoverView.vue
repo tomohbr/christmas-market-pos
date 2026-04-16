@@ -16,7 +16,7 @@ const demoStore = useDemoStore()
 const orderStore = useOrderStore()
 
 const isDemo = computed(() => demoStore.isDemoMode)
-const eventId = computed(() => authStore.user?.eventId || 'demo-event')
+const eventId = computed(() => authStore.user?.eventId || (isDemo.value ? 'demo-event' : ''))
 
 // 呼び出し中（受渡し待ち）注文
 const callingOrders = computed(() =>
@@ -62,7 +62,7 @@ function handleRevert(orderId: string, toStatus: OrderStatus) {
 }
 
 onMounted(() => {
-  if (!isDemo.value) {
+  if (!isDemo.value && eventId.value) {
     orderStore.startListening(eventId.value)
   }
 })

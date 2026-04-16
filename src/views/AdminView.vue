@@ -26,7 +26,7 @@ const settingsStore = useSettingsStore()
 const print = usePrint()
 
 const isDemo = computed(() => demoStore.isDemoMode)
-const eventId = computed(() => authStore.user?.eventId || 'demo-event')
+const eventId = computed(() => authStore.user?.eventId || (isDemo.value ? 'demo-event' : ''))
 
 // ロゴ画像アップロード
 function handleLogoUpload(event: Event) {
@@ -277,7 +277,7 @@ function goTo(path: string) {
 }
 
 onMounted(() => {
-  if (!isDemo.value) {
+  if (!isDemo.value && eventId.value) {
     productStore.startListening(eventId.value)
     orderStore.startListening(eventId.value)
     unsubReports = reportService.listenReports(eventId.value, (reports) => {

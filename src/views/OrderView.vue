@@ -23,7 +23,7 @@ const productStore = useProductStore()
 
 const settingsStore = useSettingsStore()
 const isDemo = computed(() => demoStore.isDemoMode)
-const eventId = computed(() => authStore.user?.eventId || 'demo-event')
+const eventId = computed(() => authStore.user?.eventId || (isDemo.value ? 'demo-event' : ''))
 
 // 番号札モード
 const isSelectMode = computed(() => settingsStore.settings.orderNumberMode === 'select')
@@ -272,7 +272,7 @@ const showMobileCart = ref(false)
 
 // リスナー
 onMounted(() => {
-  if (!isDemo.value) {
+  if (!isDemo.value && eventId.value) {
     productStore.startListening(eventId.value)
     orderStore.startListening(eventId.value)
   }

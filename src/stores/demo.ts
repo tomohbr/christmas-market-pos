@@ -100,6 +100,11 @@ export const useDemoStore = defineStore('demo', () => {
   // デモモード有効化（既存データがあればリセットしない）
   let pollTimer: ReturnType<typeof setInterval> | null = null
 
+  function disableDemoMode() {
+    isDemoMode.value = false
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
+  }
+
   function enableDemoMode() {
     isDemoMode.value = true
     if (products.value.length === 0) {
@@ -327,6 +332,7 @@ export const useDemoStore = defineStore('demo', () => {
     todaySales,
     todayOrderCount,
     enableDemoMode,
+    disableDemoMode,
     resetAll,
     getByCategory,
     toggleAvailability,

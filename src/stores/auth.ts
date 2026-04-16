@@ -36,7 +36,14 @@ export const useAuthStore = defineStore('auth', () => {
     return new Promise<void>((resolve) => {
       onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
-          user.value = await fetchUserProfile(firebaseUser)
+          const profile = await fetchUserProfile(firebaseUser)
+          if (profile) {
+            // 前回選択したイベントIDが localStorage にあればそれを優先
+            // （LoginView.selectEvent で保存される。セッション間で維持するため）
+            const lastEvent = localStorage.getItem('gluhwein_last_event')
+            if (lastEvent) profile.eventId = lastEvent
+          }
+          user.value = profile
         } else {
           user.value = null
         }
@@ -68,6 +75,15 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     await signOut(auth)
     user.value = null
+    // デモ状態もクリア（次回ログイン時に前回のデモ商品が混入しないように）
+    try {
+      const { useDemoStore } = await import('./demo')
+      const demoStore = useDemoStore()
+      demoStore.disableDemoMode()
+    } catch { /* ignore */ }
+    localStorage.removeItem('gluhwein_demo_autologin')
+    // last_event はあえて消さない：次回同じユーザーが入ったときに前回の
+    // イベントを復元できるようにするため
   }
 
   // デモモード: Firebase未設定時にローカルで動作確認できるようにする
